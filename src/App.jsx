@@ -549,7 +549,7 @@ export default function App() {
     const rarityStars = "★".repeat(selectedCard.rarity);
     // Updated Share Text: Includes unique URL with ID
     const shareUrl = `https://ani-taro-app.vercel.app/?id=${selectedCard.id}`;
-    const shareText = `【Ani-Taro!】運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n#AniTaro\n\n▼占いはコチラから！\n${shareUrl}`;
+    const shareText = `【 #AniTaro 】運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n▼占いはコチラから！\n${shareUrl}`;
 
     if (navigator.share) {
       try {
