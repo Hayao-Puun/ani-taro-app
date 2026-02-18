@@ -496,6 +496,22 @@ export default function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
 
+  // New useEffect for handling query parameters
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sharedId = params.get('id');
+
+    if (sharedId !== null) {
+      const cardId = parseInt(sharedId, 10);
+      const card = TAROT_DATA.find(c => c.id === cardId);
+      if (card) {
+        setSelectedCard(card);
+        setGameState('result');
+        setIsFlipped(true); // Show result immediately
+      }
+    }
+  }, []);
+
   const startReading = () => {
     setGameState('shuffling');
     setTimeout(() => {
@@ -517,6 +533,10 @@ export default function App() {
 
   const resetReading = () => {
     setIsFlipped(false);
+    
+    // Clear URL param to prevent re-opening the same result on refresh
+    window.history.pushState({}, '', window.location.pathname);
+
     setTimeout(() => {
       setGameState('start');
       setSelectedCard(null);
@@ -527,8 +547,9 @@ export default function App() {
     if (!selectedCard) return;
 
     const rarityStars = "★".repeat(selectedCard.rarity);
-    // Updated Share Text: No lucky items, only #Ani-Taro, added URL
-    const shareText = `【Ani-Taro!】運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n#Ani-Taro\n\n▼占いはコチラから！\nhttps://ani-taro-app.vercel.app/`;
+    // Updated Share Text: Includes unique URL with ID
+    const shareUrl = `https://ani-taro-app.vercel.app/?id=${selectedCard.id}`;
+    const shareText = `【Ani-Taro!】運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n#Ani-Taro\n\n▼占いはコチラから！\n${shareUrl}`;
 
     if (navigator.share) {
       try {
