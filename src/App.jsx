@@ -527,7 +527,8 @@ export default function App() {
     if (!selectedCard) return;
 
     const rarityStars = "★".repeat(selectedCard.rarity);
-    const shareText = `【Ani-Taro!】運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n🔑ラッキーアイテム：${selectedCard.luckyItem}\n🎨ラッキーカラー：${selectedCard.luckyColor}\n\n${selectedCard.tags.join(' ')} #AniTaro`;
+    // Updated Share Text: No lucky items, only #Ani-Taro, added URL
+    const shareText = `【Ani-Taro!】運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n#Ani-Taro\n\n▼占いはコチラから！\nhttps://ani-taro-app.vercel.app/`;
 
     if (navigator.share) {
       try {
