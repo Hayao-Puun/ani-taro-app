@@ -563,7 +563,7 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-md flex flex-col items-center justify-center p-6 relative">
+      <main className="flex-1 w-full max-w-md flex flex-col items-center justify-start pt-12 p-6 relative">
         
         {/* Background Decor (Soft & Fancy) */}
         <div className="absolute top-1/4 -left-10 w-56 h-56 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob"></div>
@@ -585,7 +585,7 @@ export default function App() {
               </div>
             </div>
             
-            <div className="space-y-3 mt-6 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/50">
+            <div className="space-y-3 mt-16 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/50">
               <h2 className="text-xl font-black text-gray-700 tracking-tight">
                 今日の相棒を見つけよう♪
               </h2>
