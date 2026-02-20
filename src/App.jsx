@@ -159,6 +159,8 @@ const CardFront = ({ data, size = "large" }) => {
               src={data.image} 
               alt={data.animal} 
               className="max-w-[90%] max-h-full object-contain filter drop-shadow-xl z-10"
+              crossOrigin="anonymous" // 画像を確実にキャプチャさせる設定
+              loading="eager"       // 隠し領域でも読み込ませる設定
               onError={(e) => { 
                 e.target.style.display = 'none'; 
                 if(e.target.nextSibling) e.target.nextSibling.style.display = 'block'; 
@@ -342,19 +344,16 @@ export default function App() {
     }, 300);
   };
 
-  // 🌟 シェア文言の変更（相性あり・なしで分岐し、文字数上限に配慮）
   const handleShare = async () => {
     if (!selectedCard) return;
     const shareUrl = `https://ani-taro-app.vercel.app/?partner=${selectedCard.id}`;
     let shareText = '';
 
     if (partnerCard) {
-      // 相性チェックの場合のテキスト（長文のdescは省いて文字数削減）
       const comp = getCompatibility(selectedCard.id, partnerCard.id);
-      const compText = comp.text.replace(/\n/g, ' '); // スペース区切りにしてスッキリさせる
+      const compText = comp.text.replace(/\n/g, ' '); 
       shareText = `#AniTaro 相性チェック！\nあなた「${selectedCard.animal}」\nお友達「${partnerCard.animal}」\n\n相性度は【 ${comp.score}% 】✨\n${compText}\n\n▼あなたも占ってみる？\n${shareUrl}`;
     } else {
-      // 通常の占いの場合のテキスト
       const rarityStars = "★".repeat(selectedCard.rarity);
       shareText = `#AniTaro 運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n\n▼私との相性を占ってみる？\n${shareUrl}`;
     }
@@ -367,7 +366,7 @@ export default function App() {
     }
   };
 
-  // 🌟 画像保存処理（オフスクリーンでキャプチャし、3Dによる表示崩れを防ぐ）
+  // 🌟 画像保存処理（オフスクリーンで横型4:3レイアウトをキャプチャ）
   const handleDownload = useCallback(() => {
     if (captureRef.current === null) return;
     if (!window.htmlToImage) {
@@ -378,11 +377,10 @@ export default function App() {
     setIsGenerating(true); 
     const bgColors = { day: '#fff0f5', sunset: '#fff7ed', night: '#1e1b4b' };
     
-    // captureRef (隠し要素) をキャプチャする
     window.htmlToImage.toPng(captureRef.current, { 
       cacheBust: true, 
       backgroundColor: bgColors[theme],
-      pixelRatio: 2 // 画質を良くする
+      pixelRatio: 2 // 高画質で出力
     })
       .then((dataUrl) => {
         setGeneratedImage(dataUrl); 
@@ -455,7 +453,7 @@ export default function App() {
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-12 h-12 flex items-center justify-center">
                     {partnerCard.image ? (
-                      <img src={partnerCard.image} alt={partnerCard.animal} className="max-w-full max-h-full object-contain filter drop-shadow-sm" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img src={partnerCard.image} alt={partnerCard.animal} className="max-w-full max-h-full object-contain filter drop-shadow-sm" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                     ) : null}
                     <div className="text-3xl filter drop-shadow-sm" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
                   </div>
@@ -545,7 +543,7 @@ export default function App() {
                     <div className="flex flex-col items-center">
                       <div className="w-12 h-12 flex items-center justify-center">
                         {selectedCard.image ? (
-                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
                         <div className="text-4xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
                       </div>
@@ -559,7 +557,7 @@ export default function App() {
                     <div className="flex flex-col items-center">
                       <div className="w-12 h-12 flex items-center justify-center">
                         {partnerCard.image ? (
-                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
                         <div className="text-4xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
                       </div>
@@ -596,97 +594,98 @@ export default function App() {
         )}
       </main>
 
-      {/* 🌟 【画像生成用】非表示エリア (3D変形なしのプレーンな状態をキャプチャ) */}
+      {/* 🌟 【画像生成用】非表示エリア (4:3 横型レイアウト) */}
       {selectedCard && (
-        <div style={{ position: 'fixed', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
-          <div ref={captureRef} className={`w-[420px] flex flex-col items-center pt-8 pb-10 px-6 gap-6 ${themeStyles[theme]} font-sans`}>
-            {/* ヘッダーロゴ */}
-            <div className="flex items-center gap-2 mb-2">
-              <div className="bg-white p-2 rounded-xl shadow-md rotate-3 border-2 border-pink-200">
-                <Sparkles className="w-6 h-6 text-pink-400 fill-pink-100" />
-              </div>
-              <h1 className={`font-black text-3xl tracking-tighter italic transform -skew-x-6 drop-shadow-sm ${theme === 'night' ? 'text-white' : 'text-gray-700'}`}>
-                Ani-Taro<span className="text-pink-400">!</span>
-              </h1>
-            </div>
-
-            {/* カード本体 */}
-            <div className="w-72 h-[450px]">
+        <div style={{ position: 'absolute', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
+          {/* サイズを800x600にして、横型4:3のレイアウトを作成 */}
+          <div ref={captureRef} className={`w-[800px] h-[600px] flex items-center justify-center p-8 gap-8 ${themeStyles[theme]} font-sans`}>
+            
+            {/* 左側: カード (少し大きめに表示) */}
+            <div className="w-[320px] h-[520px] shrink-0">
               <CardFront data={selectedCard} />
             </div>
 
-            {/* メッセージ */}
-            <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 ${theme === 'night' ? 'bg-indigo-900/90 border-indigo-500/30' : 'bg-white/90 border-white'}`}>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="bg-pink-500 text-white p-1.5 rounded-lg shadow-sm"><Zap className="w-4 h-4 fill-white" /></span>
-                <span className={`text-xs font-black uppercase tracking-widest ${theme === 'night' ? 'text-indigo-200' : 'text-gray-400'}`}>MESSAGE</span>
+            {/* 右側: 情報エリア (ロゴ、メッセージ、相性) */}
+            <div className="flex-1 flex flex-col gap-6 h-[520px]">
+              
+              {/* ヘッダーロゴ */}
+              <div className="flex items-center gap-3">
+                <div className="bg-white p-3 rounded-2xl shadow-md rotate-3 border-2 border-pink-200 flex items-center justify-center">
+                  <Sparkles className="w-8 h-8 text-pink-400 fill-pink-100" />
+                </div>
+                <h1 className={`font-black text-4xl tracking-tighter italic transform -skew-x-6 drop-shadow-sm ${theme === 'night' ? 'text-white' : 'text-gray-700'}`}>
+                  Ani-Taro<span className="text-pink-400">!</span>
+                </h1>
               </div>
-              <p className={`text-base leading-relaxed font-medium ${theme === 'night' ? 'text-indigo-50' : 'text-gray-700'}`}>{selectedCard.desc}</p>
+
+              {/* メッセージ */}
+              <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 flex flex-col justify-center flex-1 min-h-0 ${theme === 'night' ? 'bg-indigo-900/90 border-indigo-500/30' : 'bg-white/90 border-white'}`}>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="bg-pink-500 text-white p-2 rounded-lg shadow-sm"><Zap className="w-5 h-5 fill-white" /></span>
+                  <span className={`text-sm font-black uppercase tracking-widest ${theme === 'night' ? 'text-indigo-200' : 'text-gray-400'}`}>MESSAGE</span>
+                </div>
+                <p className={`text-xl leading-relaxed font-medium ${theme === 'night' ? 'text-indigo-50' : 'text-gray-700'}`}>{selectedCard.desc}</p>
+              </div>
+
+              {/* 相性チェック（あれば） */}
+              {partnerCard && (
+                <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 shrink-0 ${theme === 'night' ? 'bg-pink-900/40 border-pink-500/30' : 'bg-pink-50/90 border-pink-200'}`}>
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
+                    <span className={`text-base font-black tracking-widest ${theme === 'night' ? 'text-pink-200' : 'text-pink-600'}`}>相性チェック</span>
+                    <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
+                  </div>
+                  <div className="flex justify-around items-center mb-4 relative">
+                    <div className="flex flex-col items-center">
+                      <div className="w-14 h-14 flex items-center justify-center">
+                        {selectedCard.image ? (
+                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                        ) : null}
+                        <div className="text-5xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
+                      </div>
+                      <div className={`text-[12px] font-black mt-2 bg-white/50 px-3 py-1 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>あなた</div>
+                    </div>
+                    <div className="flex flex-col items-center z-10 bg-white/90 px-6 py-2 rounded-full border-2 border-pink-200 shadow-md">
+                       <div className="text-3xl font-black text-pink-500 leading-none">{getCompatibility(selectedCard.id, partnerCard.id).score}<span className="text-lg">%</span></div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="w-14 h-14 flex items-center justify-center">
+                        {partnerCard.image ? (
+                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                        ) : null}
+                        <div className="text-5xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
+                      </div>
+                      <div className={`text-[12px] font-black mt-2 bg-white/50 px-3 py-1 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>お友達</div>
+                    </div>
+                  </div>
+                  <p className={`text-base text-center font-bold px-2 leading-relaxed ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>
+                    {getCompatibility(selectedCard.id, partnerCard.id).text.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>{line}<br/></React.Fragment>
+                    ))}
+                  </p>
+                </div>
+              )}
             </div>
 
-            {/* 相性チェック */}
-            {partnerCard && (
-              <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 ${theme === 'night' ? 'bg-pink-900/40 border-pink-500/30' : 'bg-pink-50/90 border-pink-200'}`}>
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
-                  <span className={`text-sm font-black tracking-widest ${theme === 'night' ? 'text-pink-200' : 'text-pink-600'}`}>相性チェック</span>
-                  <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
-                </div>
-                <div className="flex justify-around items-center mb-4 relative">
-                  <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 flex items-center justify-center">
-                      {selectedCard.image ? (
-                        <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
-                      ) : null}
-                      <div className="text-4xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
-                    </div>
-                    <div className={`text-[10px] font-black mt-1 bg-white/50 px-2 py-0.5 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>あなた</div>
-                  </div>
-                  <div className="flex flex-col items-center z-10 bg-white/90 px-4 py-2 rounded-full border-2 border-pink-200 shadow-md">
-                     <div className="text-2xl font-black text-pink-500 leading-none">{getCompatibility(selectedCard.id, partnerCard.id).score}<span className="text-sm">%</span></div>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 flex items-center justify-center">
-                      {partnerCard.image ? (
-                        <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
-                      ) : null}
-                      <div className="text-4xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
-                    </div>
-                    <div className={`text-[10px] font-black mt-1 bg-white/50 px-2 py-0.5 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>お友達</div>
-                  </div>
-                </div>
-                <p className={`text-sm text-center font-bold px-2 leading-relaxed ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>
-                  {getCompatibility(selectedCard.id, partnerCard.id).text.split('\n').map((line, i) => (
-                    <React.Fragment key={i}>{line}<br/></React.Fragment>
-                  ))}
-                </p>
-              </div>
-            )}
           </div>
         </div>
       )}
 
-      {/* 🌟 画像保存用モーダル（長押し保存対応＆戻りやすく改善） */}
+      {/* 🌟 画像保存用モーダル（長押し保存対応＆背景タップで戻れる） */}
       {generatedImage && (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-fade-in" onClick={() => setGeneratedImage(null)}>
-          
-          {/* 戻りやすいように右上に×ボタン */}
-          <button onClick={() => setGeneratedImage(null)} className="absolute top-6 right-6 bg-white/20 text-white p-3 rounded-full font-bold hover:bg-white/40 transition shadow-sm z-10">
-            <X className="w-6 h-6" />
-          </button>
-          
-          <div className="w-full max-w-sm flex flex-col items-center" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-[800px] flex flex-col items-center" onClick={e => e.stopPropagation()}>
             <div className="bg-pink-500 text-white px-6 py-2 rounded-full font-bold mb-4 shadow-lg flex items-center gap-2 animate-bounce pointer-events-none">
               <Download className="w-5 h-5" /> 画像を長押しして保存！
             </div>
             
-            {/* スクロール可能な画像表示エリア */}
-            <div className="relative w-full max-h-[65vh] overflow-y-auto rounded-3xl shadow-2xl mb-6 hide-scrollbar">
+            {/* スクロール可能な画像表示エリア (横長画像対応) */}
+            <div className="relative w-full max-h-[70vh] overflow-y-auto rounded-xl shadow-2xl mb-6 hide-scrollbar flex justify-center">
               {/* pointer-events-auto を指定して長押しメニューが確実に反応するようにする */}
-              <img src={generatedImage} alt="Result" className="w-full h-auto pointer-events-auto" />
+              <img src={generatedImage} alt="Result" className="w-full max-w-full h-auto object-contain pointer-events-auto" />
             </div>
 
-            {/* 下部にも大きな閉じるボタン */}
+            {/* 下部の大きな閉じるボタン */}
             <button onClick={() => setGeneratedImage(null)} className="bg-white text-gray-800 px-8 py-3.5 rounded-full font-black hover:bg-gray-100 transition shadow-lg flex items-center justify-center gap-2 w-[80%] max-w-xs">
               閉じる
             </button>
@@ -718,7 +717,7 @@ export default function App() {
                          <div className={`text-[8px] font-black tracking-widest bg-white/90 px-1.5 py-0.5 rounded-full ${card.textColor} uppercase w-full truncate mb-1 shadow-sm`}>{card.name}</div>
                          <div className="w-full flex-1 flex items-center justify-center overflow-hidden">
                            {card.image ? (
-                             <img src={card.image} alt={card.animal} className="w-12 h-12 object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                             <img src={card.image} alt={card.animal} className="w-12 h-12 object-contain filter drop-shadow-md" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                            ) : null}
                            <div className="text-4xl filter drop-shadow-md emoji-pop" style={{ display: card.image ? 'none' : 'block' }}>{card.emoji}</div>
                          </div>
