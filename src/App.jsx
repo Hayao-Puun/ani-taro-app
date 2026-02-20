@@ -14,7 +14,7 @@ const TAROT_DATA = [
   { id: 7, name: "THE CHARIOT", rarity: 2, animal: "爆走イノシシ", emoji: "🐗", image: "/07_boar.png", bgGradient: "from-orange-200 via-red-200 to-orange-100", textColor: "text-red-800", accentColor: "bg-orange-400", title: "勢いで押し切る！", desc: "今はブレーキを踏む時じゃないよ、アクセル全開で！多少の障害物は気合で乗り越えられる運気。迷わず突き進め！", luckyItem: "スニーカー", luckyColor: "ビビッドオレンジ", tags: ["#前進", "#勝利", "#スピード"] },
   { id: 8, name: "STRENGTH", rarity: 2, animal: "優しいクマ", emoji: "🧸", image: "/08_bear.png", bgGradient: "from-yellow-200 via-orange-100 to-yellow-100", textColor: "text-orange-800", accentColor: "bg-orange-400", title: "優しさは強さ", desc: "力でねじ伏せるより、北風と太陽の「太陽」作戦でいこう。ニコニコしながら粘り強く接すれば、相手も心を開いてくれるはず。", luckyItem: "はちみつ", luckyColor: "ブラウン", tags: ["#忍耐", "#優しさ", "#勇気"] },
   { id: 9, name: "THE HERMIT", rarity: 1, animal: "哲学フクロウ", emoji: "🦉", image: "/09_owl.png", bgGradient: "from-slate-200 via-gray-200 to-slate-100", textColor: "text-slate-700", accentColor: "bg-slate-400", title: "自分探しの旅へ", desc: "みんなとワイワイするより、一人で深掘りしたい気分。スマホを置いてデジタルデトックス推奨。自分だけの答えが見つかるはず。", luckyItem: "イヤホン", luckyColor: "グレー", tags: ["#内省", "#探求", "#孤独"] },
-  { id: 10, name: "WHEEL OF FORTUNE", rarity: 3, animal: "運命カメレオン", emoji: "🦎", image: "/10_chameleon.png", bgGradient: "from-green-200 via-emerald-200 to-green-100", textColor: "text-green-800", accentColor: "bg-green-400", title: "チャンス到来！", desc: "ラッキーな風が吹いてきた！状況がコロコロ変わるかもしれないけど、波に乗っちゃえばこっちのもの。変化を楽しんで！", luckyItem: "サングラス", luckyColor: "エメラルド", tags: ["#転換点", "#幸運", "#変化"] },
+  { id: 10, name: "WHEEL OF Fortune", rarity: 3, animal: "運命カメレオン", emoji: "🦎", image: "/10_chameleon.png", bgGradient: "from-green-200 via-emerald-200 to-green-100", textColor: "text-green-800", accentColor: "bg-green-400", title: "チャンス到来！", desc: "ラッキーな風が吹いてきた！状況がコロコロ変わるかもしれないけど、波に乗っちゃえばこっちのもの。変化を楽しんで！", luckyItem: "サングラス", luckyColor: "エメラルド", tags: ["#転換点", "#幸運", "#変化"] },
   { id: 11, name: "JUSTICE", rarity: 2, animal: "バランスフラミンゴ", emoji: "🦩", image: "/11_flamingo.png", bgGradient: "from-pink-200 via-red-100 to-pink-100", textColor: "text-rose-800", accentColor: "bg-rose-400", title: "バランス感覚", desc: "仕事と遊び、本音と建前。今日はそのバランスが絶妙に取れる日。片方に偏りすぎず、冷静な判断ができるよ。", luckyItem: "ヨガマット", luckyColor: "コーラル", tags: ["#公平", "#均衡", "#正しさ"] },
   { id: 12, name: "THE HANGED MAN", rarity: 1, animal: "のんびりナマケモノ", emoji: "🦥", image: "/12_sloth.png", bgGradient: "from-green-100 via-yellow-100 to-green-100", textColor: "text-green-800", accentColor: "bg-green-500", title: "視点を変えて", desc: "行き詰まったら、逆立ちしてみる？（比喩だよ！）無理に動かず、一旦停止して違う角度から見ると、意外な解決策が見つかるかも。", luckyItem: "アイマスク", luckyColor: "ベージュ", tags: ["#忍耐", "#視点変更", "#試練"] },
   { id: 13, name: "DEATH", rarity: 3, animal: "再生の蝶", emoji: "🦋", image: "/13_butterfly.png", bgGradient: "from-purple-300 via-blue-300 to-indigo-300", textColor: "text-purple-900", accentColor: "bg-purple-500", title: "華麗なる変身", desc: "「終わり」は「始まり」の合図。古い習慣やイマイチな関係はスッパリ手放して、新しい自分に生まれ変わるチャンス！脱皮の時だよ。", luckyItem: "新しいコスメ", luckyColor: "ラベンダー", tags: ["#終了", "#再生", "#変容"] },
@@ -171,7 +171,7 @@ const CardFront = ({ data, size = "large" }) => {
             {data.emoji}
           </div>
           
-          <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 whitespace-nowrap bg-white border-2 ${data.textColor.replace('text', 'border')} rounded-full shadow-md z-20 ${isSmall ? 'px-3 py-0.5' : 'px-4 py-1'}`}>
+          <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white border-2 ${data.textColor.replace('text', 'border')} rounded-full shadow-md z-20 ${isSmall ? 'px-3 py-0.5' : 'px-4 py-1'}`}>
              <span className={`font-black ${data.textColor} ${isSmall ? 'text-[10px]' : 'text-sm'}`}>
                 {data.animal}
              </span>
@@ -377,10 +377,13 @@ export default function App() {
     setIsGenerating(true); 
     const bgColors = { day: '#fff0f5', sunset: '#fff7ed', night: '#1e1b4b' };
     
+    // 画像のURLがCORS制約に引っかかっている可能性があるため、
+    // HTML-to-Imageのオプションに `useCORS: true` を追加
     window.htmlToImage.toPng(captureRef.current, { 
       cacheBust: true, 
       backgroundColor: bgColors[theme],
-      pixelRatio: 2 // 高画質で出力
+      pixelRatio: 2, // 高画質で出力
+      useCORS: true // 外部画像の読み込みを許可
     })
       .then((dataUrl) => {
         setGeneratedImage(dataUrl); 
@@ -594,71 +597,70 @@ export default function App() {
         )}
       </main>
 
-      {/* 🌟 【画像生成用】非表示エリア (4:3 横型レイアウト) */}
+      {/* 🌟 【画像生成用】非表示エリア (1024x768 の余裕を持たせた4:3 横型レイアウト) */}
       {selectedCard && (
         <div style={{ position: 'absolute', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
-          {/* サイズを800x600にして、横型4:3のレイアウトを作成 */}
-          <div ref={captureRef} className={`w-[800px] h-[600px] flex items-center justify-center p-8 gap-8 ${themeStyles[theme]} font-sans`}>
+          <div ref={captureRef} className={`w-[1024px] h-[768px] flex items-center justify-center p-12 gap-12 ${themeStyles[theme]} font-sans`}>
             
-            {/* 左側: カード (少し大きめに表示) */}
-            <div className="w-[320px] h-[520px] shrink-0">
-              <CardFront data={selectedCard} />
+            {/* 左側: カード */}
+            <div className="w-[360px] h-[580px] shrink-0">
+              <CardFront data={selectedCard} size="large" />
             </div>
 
             {/* 右側: 情報エリア (ロゴ、メッセージ、相性) */}
-            <div className="flex-1 flex flex-col gap-6 h-[520px]">
+            <div className="flex-1 flex flex-col gap-8 h-full justify-center">
               
               {/* ヘッダーロゴ */}
-              <div className="flex items-center gap-3">
-                <div className="bg-white p-3 rounded-2xl shadow-md rotate-3 border-2 border-pink-200 flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-pink-400 fill-pink-100" />
+              <div className="flex items-center gap-4">
+                <div className="bg-white p-4 rounded-2xl shadow-md rotate-3 border-2 border-pink-200 flex items-center justify-center">
+                  <Sparkles className="w-10 h-10 text-pink-400 fill-pink-100" />
                 </div>
-                <h1 className={`font-black text-4xl tracking-tighter italic transform -skew-x-6 drop-shadow-sm ${theme === 'night' ? 'text-white' : 'text-gray-700'}`}>
+                <h1 className={`font-black text-5xl tracking-tighter italic transform -skew-x-6 drop-shadow-sm ${theme === 'night' ? 'text-white' : 'text-gray-700'}`}>
                   Ani-Taro<span className="text-pink-400">!</span>
                 </h1>
               </div>
 
               {/* メッセージ */}
-              <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 flex flex-col justify-center flex-1 min-h-0 ${theme === 'night' ? 'bg-indigo-900/90 border-indigo-500/30' : 'bg-white/90 border-white'}`}>
+              <div className={`w-full rounded-[2rem] p-8 shadow-xl border-2 flex flex-col ${theme === 'night' ? 'bg-indigo-900/90 border-indigo-500/30' : 'bg-white/90 border-white'}`}>
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="bg-pink-500 text-white p-2 rounded-lg shadow-sm"><Zap className="w-5 h-5 fill-white" /></span>
-                  <span className={`text-sm font-black uppercase tracking-widest ${theme === 'night' ? 'text-indigo-200' : 'text-gray-400'}`}>MESSAGE</span>
+                  <span className="bg-pink-500 text-white p-2.5 rounded-xl shadow-sm"><Zap className="w-6 h-6 fill-white" /></span>
+                  <span className={`text-lg font-black uppercase tracking-widest ${theme === 'night' ? 'text-indigo-200' : 'text-gray-400'}`}>MESSAGE</span>
                 </div>
-                <p className={`text-xl leading-relaxed font-medium ${theme === 'night' ? 'text-indigo-50' : 'text-gray-700'}`}>{selectedCard.desc}</p>
+                <p className={`text-2xl leading-relaxed font-medium break-words whitespace-pre-wrap tracking-wide ${theme === 'night' ? 'text-indigo-50' : 'text-gray-700'}`}>{selectedCard.desc}</p>
               </div>
 
               {/* 相性チェック（あれば） */}
               {partnerCard && (
-                <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 shrink-0 ${theme === 'night' ? 'bg-pink-900/40 border-pink-500/30' : 'bg-pink-50/90 border-pink-200'}`}>
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
-                    <span className={`text-base font-black tracking-widest ${theme === 'night' ? 'text-pink-200' : 'text-pink-600'}`}>相性チェック</span>
-                    <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
+                <div className={`w-full rounded-[2rem] p-8 shadow-xl border-2 shrink-0 ${theme === 'night' ? 'bg-pink-900/40 border-pink-500/30' : 'bg-pink-50/90 border-pink-200'}`}>
+                  <div className="flex items-center justify-center gap-2 mb-6">
+                    <Heart className="w-8 h-8 text-pink-500 fill-pink-500" />
+                    <span className={`text-xl font-black tracking-widest ${theme === 'night' ? 'text-pink-200' : 'text-pink-600'}`}>相性チェック</span>
+                    <Heart className="w-8 h-8 text-pink-500 fill-pink-500" />
                   </div>
-                  <div className="flex justify-around items-center mb-4 relative">
+                  <div className="flex justify-around items-center mb-6 relative">
                     <div className="flex flex-col items-center">
-                      <div className="w-14 h-14 flex items-center justify-center">
+                      <div className="w-20 h-20 flex items-center justify-center">
                         {selectedCard.image ? (
                           <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
-                        <div className="text-5xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
+                        <div className="text-6xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
                       </div>
-                      <div className={`text-[12px] font-black mt-2 bg-white/50 px-3 py-1 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>あなた</div>
+                      <div className={`text-sm font-black mt-3 bg-white/70 px-4 py-1.5 rounded-full shadow-sm ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>あなた</div>
                     </div>
-                    <div className="flex flex-col items-center z-10 bg-white/90 px-6 py-2 rounded-full border-2 border-pink-200 shadow-md">
-                       <div className="text-3xl font-black text-pink-500 leading-none">{getCompatibility(selectedCard.id, partnerCard.id).score}<span className="text-lg">%</span></div>
+                    <div className="flex flex-col items-center z-10 bg-white/90 px-8 py-3 rounded-full border-4 border-pink-200 shadow-md">
+                       <div className="text-5xl font-black text-pink-500 leading-none">{getCompatibility(selectedCard.id, partnerCard.id).score}<span className="text-2xl">%</span></div>
                     </div>
                     <div className="flex flex-col items-center">
-                      <div className="w-14 h-14 flex items-center justify-center">
+                      <div className="w-20 h-20 flex items-center justify-center">
                         {partnerCard.image ? (
                           <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
-                        <div className="text-5xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
+                        <div className="text-6xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
                       </div>
-                      <div className={`text-[12px] font-black mt-2 bg-white/50 px-3 py-1 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>お友達</div>
+                      <div className={`text-sm font-black mt-3 bg-white/70 px-4 py-1.5 rounded-full shadow-sm ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>お友達</div>
                     </div>
                   </div>
-                  <p className={`text-base text-center font-bold px-2 leading-relaxed ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>
+                  <p className={`text-xl text-center font-bold px-4 leading-relaxed ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>
                     {getCompatibility(selectedCard.id, partnerCard.id).text.split('\n').map((line, i) => (
                       <React.Fragment key={i}>{line}<br/></React.Fragment>
                     ))}
@@ -772,6 +774,7 @@ export default function App() {
       )}
 
       <style>{`
+        .capture-mode * { font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif !important; }
         .emoji-pop { text-shadow: 3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff, 3px 0px 0 #fff, -3px 0px 0 #fff, 0px 3px 0 #fff, 0px -3px 0 #fff; }
         .perspective-1000 { perspective: 1000px; }
         .transform-style-3d { transform-style: preserve-3d; }
