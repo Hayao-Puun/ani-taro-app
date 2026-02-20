@@ -14,7 +14,7 @@ const TAROT_DATA = [
   { id: 7, name: "THE CHARIOT", rarity: 2, animal: "爆走イノシシ", emoji: "🐗", image: "/07_boar.png", bgGradient: "from-orange-200 via-red-200 to-orange-100", textColor: "text-red-800", accentColor: "bg-orange-400", title: "勢いで押し切る！", desc: "今はブレーキを踏む時じゃないよ、アクセル全開で！多少の障害物は気合で乗り越えられる運気。迷わず突き進め！", luckyItem: "スニーカー", luckyColor: "ビビッドオレンジ", tags: ["#前進", "#勝利", "#スピード"] },
   { id: 8, name: "STRENGTH", rarity: 2, animal: "優しいクマ", emoji: "🧸", image: "/08_bear.png", bgGradient: "from-yellow-200 via-orange-100 to-yellow-100", textColor: "text-orange-800", accentColor: "bg-orange-400", title: "優しさは強さ", desc: "力でねじ伏せるより、北風と太陽の「太陽」作戦でいこう。ニコニコしながら粘り強く接すれば、相手も心を開いてくれるはず。", luckyItem: "はちみつ", luckyColor: "ブラウン", tags: ["#忍耐", "#優しさ", "#勇気"] },
   { id: 9, name: "THE HERMIT", rarity: 1, animal: "哲学フクロウ", emoji: "🦉", image: "/09_owl.png", bgGradient: "from-slate-200 via-gray-200 to-slate-100", textColor: "text-slate-700", accentColor: "bg-slate-400", title: "自分探しの旅へ", desc: "みんなとワイワイするより、一人で深掘りしたい気分。スマホを置いてデジタルデトックス推奨。自分だけの答えが見つかるはず。", luckyItem: "イヤホン", luckyColor: "グレー", tags: ["#内省", "#探求", "#孤独"] },
-  { id: 10, name: "WHEEL OF Fortune", rarity: 3, animal: "運命カメレオン", emoji: "🦎", image: "/10_chameleon.png", bgGradient: "from-green-200 via-emerald-200 to-green-100", textColor: "text-green-800", accentColor: "bg-green-400", title: "チャンス到来！", desc: "ラッキーな風が吹いてきた！状況がコロコロ変わるかもしれないけど、波に乗っちゃえばこっちのもの。変化を楽しんで！", luckyItem: "サングラス", luckyColor: "エメラルド", tags: ["#転換点", "#幸運", "#変化"] },
+  { id: 10, name: "WHEEL OF FORTUNE", rarity: 3, animal: "運命カメレオン", emoji: "🦎", image: "/10_chameleon.png", bgGradient: "from-green-200 via-emerald-200 to-green-100", textColor: "text-green-800", accentColor: "bg-green-400", title: "チャンス到来！", desc: "ラッキーな風が吹いてきた！状況がコロコロ変わるかもしれないけど、波に乗っちゃえばこっちのもの。変化を楽しんで！", luckyItem: "サングラス", luckyColor: "エメラルド", tags: ["#転換点", "#幸運", "#変化"] },
   { id: 11, name: "JUSTICE", rarity: 2, animal: "バランスフラミンゴ", emoji: "🦩", image: "/11_flamingo.png", bgGradient: "from-pink-200 via-red-100 to-pink-100", textColor: "text-rose-800", accentColor: "bg-rose-400", title: "バランス感覚", desc: "仕事と遊び、本音と建前。今日はそのバランスが絶妙に取れる日。片方に偏りすぎず、冷静な判断ができるよ。", luckyItem: "ヨガマット", luckyColor: "コーラル", tags: ["#公平", "#均衡", "#正しさ"] },
   { id: 12, name: "THE HANGED MAN", rarity: 1, animal: "のんびりナマケモノ", emoji: "🦥", image: "/12_sloth.png", bgGradient: "from-green-100 via-yellow-100 to-green-100", textColor: "text-green-800", accentColor: "bg-green-500", title: "視点を変えて", desc: "行き詰まったら、逆立ちしてみる？（比喩だよ！）無理に動かず、一旦停止して違う角度から見ると、意外な解決策が見つかるかも。", luckyItem: "アイマスク", luckyColor: "ベージュ", tags: ["#忍耐", "#視点変更", "#試練"] },
   { id: 13, name: "DEATH", rarity: 3, animal: "再生の蝶", emoji: "🦋", image: "/13_butterfly.png", bgGradient: "from-purple-300 via-blue-300 to-indigo-300", textColor: "text-purple-900", accentColor: "bg-purple-500", title: "華麗なる変身", desc: "「終わり」は「始まり」の合図。古い習慣やイマイチな関係はスッパリ手放して、新しい自分に生まれ変わるチャンス！脱皮の時だよ。", luckyItem: "新しいコスメ", luckyColor: "ラベンダー", tags: ["#終了", "#再生", "#変容"] },
@@ -159,7 +159,6 @@ const CardFront = ({ data, size = "large" }) => {
               src={data.image} 
               alt={data.animal} 
               className="max-w-[90%] max-h-full object-contain filter drop-shadow-xl z-10"
-              crossOrigin="anonymous" // 画像を確実にキャプチャさせる設定
               loading="eager"       // 隠し領域でも読み込ませる設定
               onError={(e) => { 
                 e.target.style.display = 'none'; 
@@ -377,23 +376,23 @@ export default function App() {
     setIsGenerating(true); 
     const bgColors = { day: '#fff0f5', sunset: '#fff7ed', night: '#1e1b4b' };
     
-    // 画像のURLがCORS制約に引っかかっている可能性があるため、
-    // HTML-to-Imageのオプションに `useCORS: true` を追加
-    window.htmlToImage.toPng(captureRef.current, { 
-      cacheBust: true, 
-      backgroundColor: bgColors[theme],
-      pixelRatio: 2, // 高画質で出力
-      useCORS: true // 外部画像の読み込みを許可
-    })
-      .then((dataUrl) => {
-        setGeneratedImage(dataUrl); 
-        setIsGenerating(false);
+    // 少し待ってから生成を開始し、画面のレンダリングサイクルを確保する
+    setTimeout(() => {
+      window.htmlToImage.toPng(captureRef.current, { 
+        cacheBust: true, 
+        backgroundColor: bgColors[theme],
+        pixelRatio: 2 // 高画質で出力
       })
-      .catch((err) => {
-        console.error('画像生成エラー:', err);
-        alert("画像の生成に失敗しました🙇‍♂️");
-        setIsGenerating(false);
-      });
+        .then((dataUrl) => {
+          setGeneratedImage(dataUrl); 
+          setIsGenerating(false);
+        })
+        .catch((err) => {
+          console.error('画像生成エラー:', err);
+          alert("画像の生成に失敗しました🙇‍♂️");
+          setIsGenerating(false);
+        });
+    }, 150);
   }, [captureRef, selectedCard, theme]);
 
   const themeStyles = {
@@ -456,7 +455,7 @@ export default function App() {
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-12 h-12 flex items-center justify-center">
                     {partnerCard.image ? (
-                      <img src={partnerCard.image} alt={partnerCard.animal} className="max-w-full max-h-full object-contain filter drop-shadow-sm" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img src={partnerCard.image} alt={partnerCard.animal} className="max-w-full max-h-full object-contain filter drop-shadow-sm" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                     ) : null}
                     <div className="text-3xl filter drop-shadow-sm" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
                   </div>
@@ -546,7 +545,7 @@ export default function App() {
                     <div className="flex flex-col items-center">
                       <div className="w-12 h-12 flex items-center justify-center">
                         {selectedCard.image ? (
-                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
                         <div className="text-4xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
                       </div>
@@ -560,7 +559,7 @@ export default function App() {
                     <div className="flex flex-col items-center">
                       <div className="w-12 h-12 flex items-center justify-center">
                         {partnerCard.image ? (
-                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
                         <div className="text-4xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
                       </div>
@@ -641,7 +640,7 @@ export default function App() {
                     <div className="flex flex-col items-center">
                       <div className="w-20 h-20 flex items-center justify-center">
                         {selectedCard.image ? (
-                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                          <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
                         <div className="text-6xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
                       </div>
@@ -653,7 +652,7 @@ export default function App() {
                     <div className="flex flex-col items-center">
                       <div className="w-20 h-20 flex items-center justify-center">
                         {partnerCard.image ? (
-                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" crossOrigin="anonymous" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                          <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" loading="eager" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                         ) : null}
                         <div className="text-6xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
                       </div>
@@ -681,8 +680,8 @@ export default function App() {
               <Download className="w-5 h-5" /> 画像を長押しして保存！
             </div>
             
-            {/* スクロール可能な画像表示エリア (横長画像対応) */}
-            <div className="relative w-full max-h-[70vh] overflow-y-auto rounded-xl shadow-2xl mb-6 hide-scrollbar flex justify-center">
+            {/* スクロール可能な画像表示エリア (影を削除しスッキリ) */}
+            <div className="relative w-full max-h-[70vh] overflow-y-auto rounded-xl mb-6 hide-scrollbar flex justify-center">
               {/* pointer-events-auto を指定して長押しメニューが確実に反応するようにする */}
               <img src={generatedImage} alt="Result" className="w-full max-w-full h-auto object-contain pointer-events-auto" />
             </div>
@@ -719,7 +718,7 @@ export default function App() {
                          <div className={`text-[8px] font-black tracking-widest bg-white/90 px-1.5 py-0.5 rounded-full ${card.textColor} uppercase w-full truncate mb-1 shadow-sm`}>{card.name}</div>
                          <div className="w-full flex-1 flex items-center justify-center overflow-hidden">
                            {card.image ? (
-                             <img src={card.image} alt={card.animal} className="w-12 h-12 object-contain filter drop-shadow-md" crossOrigin="anonymous" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                             <img src={card.image} alt={card.animal} className="w-12 h-12 object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                            ) : null}
                            <div className="text-4xl filter drop-shadow-md emoji-pop" style={{ display: card.image ? 'none' : 'block' }}>{card.emoji}</div>
                          </div>
@@ -742,10 +741,15 @@ export default function App() {
           {collectionDetailCard && (
              <div key={collectionDetailCard.card.id} className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={() => setCollectionDetailCard(null)}>
                <div className="relative w-full max-w-sm flex flex-col items-center animate-dealCard">
-                 <button onClick={() => setCollectionDetailCard(null)} className="absolute -top-14 right-0 bg-white/20 text-white p-2.5 rounded-full hover:bg-white/40 transition backdrop-blur-sm shadow-lg z-10"><X className="w-6 h-6" /></button>
-                 <div ref={detailScrollRef} className="w-full max-h-[85vh] overflow-y-auto hide-scrollbar rounded-3xl pb-6" onClick={e => e.stopPropagation()}>
+                 <div ref={detailScrollRef} className="w-full max-h-[85vh] overflow-y-auto hide-scrollbar rounded-3xl pb-6 pt-2" onClick={e => e.stopPropagation()}>
+                   
+                   {/* バツボタンをスクロール内に移動 */}
+                   <div className="flex justify-end px-4 mb-2">
+                     <button onClick={() => setCollectionDetailCard(null)} className="bg-white/20 text-white p-2.5 rounded-full hover:bg-white/40 transition backdrop-blur-sm shadow-md"><X className="w-5 h-5" /></button>
+                   </div>
+
                    {/* ここでサイズ"small"を指定して描画崩れを防ぐ */}
-                   <div className="w-56 h-[350px] mx-auto mb-6 relative shrink-0 mt-2"><CardFront data={collectionDetailCard.card} size="small" /></div>
+                   <div className="w-56 h-[350px] mx-auto mb-6 relative shrink-0"><CardFront data={collectionDetailCard.card} size="small" /></div>
                    <div className="bg-white/95 backdrop-blur-md rounded-[2rem] p-6 shadow-2xl border-2 border-white text-gray-800 relative mx-2">
                      <div className="flex items-center gap-2 mb-3">
                        <span className="bg-pink-500 text-white p-1 rounded-lg"><Zap className="w-3 h-3 fill-white" /></span>
