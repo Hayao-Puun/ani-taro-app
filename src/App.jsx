@@ -75,15 +75,18 @@ const getCompatibility = (id1, id2) => {
   return { score, text };
 };
 
-const RarityDisplay = ({ rarity }) => {
+// sizeプロップを追加してサイズによって表示を微調整
+const RarityDisplay = ({ rarity, size = "large" }) => {
   const isSecret = rarity === 4;
   const maxStars = isSecret ? 4 : 3;
+  const isSmall = size === "small";
+
   return (
-    <div className={`flex gap-0.5 bg-white/50 backdrop-blur-md px-2 py-1 rounded-full border shadow-sm ${isSecret ? 'border-pink-400' : 'border-white'}`}>
+    <div className={`flex bg-white/50 backdrop-blur-md rounded-full border shadow-sm ${isSecret ? 'border-pink-400' : 'border-white'} ${isSmall ? 'gap-0 px-1.5 py-0.5' : 'gap-0.5 px-2 py-1'}`}>
       {[...Array(maxStars)].map((_, i) => (
         <Star
           key={i}
-          className={`w-4 h-4 ${isSecret ? 'fill-pink-400 text-pink-500' : (i < rarity ? 'fill-yellow-400 text-yellow-500' : 'text-gray-300')}`}
+          className={`${isSmall ? 'w-3 h-3' : 'w-4 h-4'} ${isSecret ? 'fill-pink-400 text-pink-500' : (i < rarity ? 'fill-yellow-400 text-yellow-500' : 'text-gray-300')}`}
         />
       ))}
     </div>
@@ -105,7 +108,10 @@ const CardBack = () => (
   </div>
 );
 
-const CardFront = ({ data }) => {
+// sizeプロップを追加して、コンテナサイズに合わせて中身の比率を変更する
+const CardFront = ({ data, size = "large" }) => {
+  const isSmall = size === "small";
+
   const rarityEffects = {
     1: "border-white",
     2: "border-white ring-4 ring-yellow-100",
@@ -114,39 +120,40 @@ const CardFront = ({ data }) => {
   };
 
   return (
-    <div className={`w-full h-full rounded-3xl bg-gradient-to-b ${data.bgGradient} p-4 shadow-2xl border-[8px] ${rarityEffects[data.rarity]} flex flex-col items-center justify-between text-center relative overflow-hidden transition-all duration-500`}>
+    <div className={`w-full h-full rounded-3xl bg-gradient-to-b ${data.bgGradient} ${isSmall ? 'p-2 border-[5px]' : 'p-4 border-[8px]'} shadow-2xl ${rarityEffects[data.rarity]} flex flex-col items-center justify-between text-center relative overflow-hidden transition-all duration-500`}>
       <div className="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none">
         <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[40%] bg-white rounded-full blur-2xl"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-white rounded-full blur-2xl"></div>
-        <div className="absolute top-10 right-10 text-white/60 text-xl">✦</div>
-        <div className="absolute bottom-20 left-8 text-white/60 text-2xl">★</div>
+        <div className={`absolute top-10 right-10 text-white/60 ${isSmall ? 'text-lg' : 'text-xl'}`}>✦</div>
+        <div className={`absolute bottom-20 left-8 text-white/60 ${isSmall ? 'text-xl' : 'text-2xl'}`}>★</div>
       </div>
       
+      {/* 🌟 Header Area */}
       <div className="relative z-10 w-full flex justify-between items-center mt-1">
-        <div className={`text-[10px] font-black tracking-widest bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full ${data.textColor} uppercase shadow-sm border border-white/50`}>
+        <div className={`font-black tracking-widest bg-white/90 backdrop-blur-sm rounded-full ${data.textColor} uppercase shadow-sm border border-white/50 ${isSmall ? 'text-[8px] px-2 py-1' : 'text-[10px] px-3 py-1.5'}`}>
           {data.name}
         </div>
-        <RarityDisplay rarity={data.rarity} />
+        <RarityDisplay rarity={data.rarity} size={size} />
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center -mt-4 w-full">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/50 rounded-full blur-xl animate-pulse"></div>
+      {/* 🌟 Main Image Area */}
+      <div className={`relative z-10 flex-1 flex flex-col items-center justify-center w-full min-h-0 ${isSmall ? '-mt-2' : '-mt-4'}`}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/50 rounded-full blur-xl animate-pulse pointer-events-none"></div>
         
         {data.rarity >= 3 && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-             <Sparkles className="absolute -top-4 -right-4 w-8 h-8 text-yellow-400 animate-bounce" />
-             <Sparkles className="absolute top-10 -left-6 w-6 h-6 text-pink-400 animate-pulse delay-75" />
+             <Sparkles className={`absolute -top-4 -right-4 text-yellow-400 animate-bounce ${isSmall ? 'w-6 h-6' : 'w-8 h-8'}`} />
+             <Sparkles className={`absolute top-10 -left-6 text-pink-400 animate-pulse delay-75 ${isSmall ? 'w-4 h-4' : 'w-6 h-6'}`} />
              {data.rarity === 4 && (
                 <>
-                  <Sparkles className="absolute bottom-10 -right-6 w-10 h-10 text-purple-400 animate-bounce delay-150" />
-                  <Star className="absolute -bottom-4 left-4 w-6 h-6 fill-yellow-300 text-yellow-400 animate-pulse" />
+                  <Sparkles className={`absolute bottom-10 -right-6 text-purple-400 animate-bounce delay-150 ${isSmall ? 'w-6 h-6' : 'w-10 h-10'}`} />
+                  <Star className={`absolute -bottom-4 left-4 fill-yellow-300 text-yellow-400 animate-pulse ${isSmall ? 'w-4 h-4' : 'w-6 h-6'}`} />
                 </>
              )}
           </div>
         )}
 
-        {/* 🌟 画像と絵文字のハイブリッド表示 */}
-        <div className="relative transform hover:scale-105 transition-transform duration-300 cursor-default flex flex-col items-center justify-center w-full h-40">
+        <div className="relative transform hover:scale-105 transition-transform duration-300 cursor-default flex flex-col items-center justify-center w-full flex-1 min-h-0 py-4">
           {data.image && (
             <img 
               src={data.image} 
@@ -158,39 +165,40 @@ const CardFront = ({ data }) => {
               }} 
             />
           )}
-          <div className="text-[8.5rem] leading-none filter drop-shadow-xl emoji-pop" style={{ display: data.image ? 'none' : 'block' }}>
+          <div className={`leading-none filter drop-shadow-xl emoji-pop ${isSmall ? 'text-[6rem]' : 'text-[8.5rem]'}`} style={{ display: data.image ? 'none' : 'block' }}>
             {data.emoji}
           </div>
           
-          <div className={`absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white border-2 ${data.textColor.replace('text', 'border')} px-4 py-1 rounded-full shadow-md z-20`}>
-             <span className={`text-sm font-black ${data.textColor}`}>
+          <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 whitespace-nowrap bg-white border-2 ${data.textColor.replace('text', 'border')} rounded-full shadow-md z-20 ${isSmall ? 'px-3 py-0.5' : 'px-4 py-1'}`}>
+             <span className={`font-black ${data.textColor} ${isSmall ? 'text-[10px]' : 'text-sm'}`}>
                 {data.animal}
              </span>
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 w-full bg-white/80 rounded-2xl p-4 shadow-lg border-2 border-white/60 backdrop-blur-md mt-6">
-        <h4 className={`font-black ${data.textColor} text-lg mb-2 flex items-center justify-center gap-1`}>
-          {data.rarity >= 3 && <Crown className={`w-4 h-4 ${data.rarity === 4 ? 'fill-pink-400 text-pink-600' : 'fill-yellow-400 text-yellow-600'}`} />}
+      {/* 🌟 Footer Area */}
+      <div className={`relative z-10 w-full bg-white/80 rounded-2xl shadow-lg border-2 border-white/60 backdrop-blur-md flex flex-col justify-center ${isSmall ? 'p-2 mt-3' : 'p-4 mt-6'}`}>
+        <h4 className={`font-black ${data.textColor} flex items-center justify-center gap-1 leading-tight ${isSmall ? 'text-[11px] mb-1' : 'text-lg mb-2'}`}>
+          {data.rarity >= 3 && <Crown className={`${isSmall ? 'w-3 h-3' : 'w-4 h-4'} ${data.rarity === 4 ? 'fill-pink-400 text-pink-600' : 'fill-yellow-400 text-yellow-600'}`} />}
           {data.title}
-          {data.rarity >= 3 && <Crown className={`w-4 h-4 ${data.rarity === 4 ? 'fill-pink-400 text-pink-600' : 'fill-yellow-400 text-yellow-600'}`} />}
+          {data.rarity >= 3 && <Crown className={`${isSmall ? 'w-3 h-3' : 'w-4 h-4'} ${data.rarity === 4 ? 'fill-pink-400 text-pink-600' : 'fill-yellow-400 text-yellow-600'}`} />}
         </h4>
-        <div className="bg-white/60 rounded-lg p-2 mb-2 flex flex-col gap-1 text-xs border border-white/50">
+        <div className={`bg-white/60 rounded-lg flex flex-col border border-white/50 ${isSmall ? 'gap-0.5 p-1 mb-1 text-[9px]' : 'gap-1 p-2 mb-2 text-xs'}`}>
           <div className="flex items-center justify-center gap-1">
              <span className="font-bold text-gray-400">🔑 ITEM:</span>
-             <span className={`font-bold ${data.textColor}`}>{data.luckyItem}</span>
+             <span className={`font-bold ${data.textColor} truncate max-w-[120px]`}>{data.luckyItem}</span>
           </div>
           <div className="w-full h-px bg-gray-200/50"></div>
           <div className="flex items-center justify-center gap-1">
              <span className="font-bold text-gray-400">🎨 COLOR:</span>
-             <span className={`font-bold ${data.textColor}`}>{data.luckyColor}</span>
+             <span className={`font-bold ${data.textColor} truncate max-w-[120px]`}>{data.luckyColor}</span>
           </div>
         </div>
-        <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2 opacity-50"></div>
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className={`w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-50 ${isSmall ? 'my-1' : 'my-2'}`}></div>
+        <div className="flex flex-wrap justify-center gap-1">
           {data.tags.map(tag => (
-            <span key={tag} className={`text-[10px] ${data.accentColor} text-white font-bold px-2 py-1 rounded-full shadow-sm`}>
+            <span key={tag} className={`${data.accentColor} text-white font-bold rounded-full shadow-sm ${isSmall ? 'text-[8px] px-1.5 py-0.5' : 'text-[10px] px-2 py-1'}`}>
               {tag}
             </span>
           ))}
@@ -598,7 +606,8 @@ export default function App() {
                <div className="relative w-full max-w-sm flex flex-col items-center animate-dealCard">
                  <button onClick={() => setCollectionDetailCard(null)} className="absolute -top-14 right-0 bg-white/20 text-white p-2.5 rounded-full hover:bg-white/40 transition backdrop-blur-sm shadow-lg z-10"><X className="w-6 h-6" /></button>
                  <div ref={detailScrollRef} className="w-full max-h-[85vh] overflow-y-auto hide-scrollbar rounded-3xl pb-6" onClick={e => e.stopPropagation()}>
-                   <div className="w-56 h-[350px] mx-auto mb-6 relative shrink-0 mt-2"><CardFront data={collectionDetailCard.card} /></div>
+                   {/* ここでサイズ"small"を指定して描画崩れを防ぐ */}
+                   <div className="w-56 h-[350px] mx-auto mb-6 relative shrink-0 mt-2"><CardFront data={collectionDetailCard.card} size="small" /></div>
                    <div className="bg-white/95 backdrop-blur-md rounded-[2rem] p-6 shadow-2xl border-2 border-white text-gray-800 relative mx-2">
                      <div className="flex items-center gap-2 mb-3">
                        <span className="bg-pink-500 text-white p-1 rounded-lg"><Zap className="w-3 h-3 fill-white" /></span>
