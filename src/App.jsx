@@ -18,7 +18,7 @@ const TAROT_DATA = [
   { id: 11, name: "JUSTICE", rarity: 2, animal: "バランスフラミンゴ", emoji: "🦩", image: "/11_flamingo.png", bgGradient: "from-pink-200 via-red-100 to-pink-100", textColor: "text-rose-800", accentColor: "bg-rose-400", title: "バランス感覚", desc: "仕事と遊び、本音と建前。今日はそのバランスが絶妙に取れる日。片方に偏りすぎず、冷静な判断ができるよ。", luckyItem: "ヨガマット", luckyColor: "コーラル", tags: ["#公平", "#均衡", "#正しさ"] },
   { id: 12, name: "THE HANGED MAN", rarity: 1, animal: "のんびりナマケモノ", emoji: "🦥", image: "/12_sloth.png", bgGradient: "from-green-100 via-yellow-100 to-green-100", textColor: "text-green-800", accentColor: "bg-green-500", title: "視点を変えて", desc: "行き詰まったら、逆立ちしてみる？（比喩だよ！）無理に動かず、一旦停止して違う角度から見ると、意外な解決策が見つかるかも。", luckyItem: "アイマスク", luckyColor: "ベージュ", tags: ["#忍耐", "#視点変更", "#試練"] },
   { id: 13, name: "DEATH", rarity: 3, animal: "再生の蝶", emoji: "🦋", image: "/13_butterfly.png", bgGradient: "from-purple-300 via-blue-300 to-indigo-300", textColor: "text-purple-900", accentColor: "bg-purple-500", title: "華麗なる変身", desc: "「終わり」は「始まり」の合図。古い習慣やイマイチな関係はスッパリ手放して、新しい自分に生まれ変わるチャンス！脱皮の時だよ。", luckyItem: "新しいコスメ", luckyColor: "ラベンダー", tags: ["#終了", "#再生", "#変容"] },
-  { id: 14, name: "TEMPERANCE", rarity: 2, animal: "調和のイルカ", emoji: "🐬", image: "/14_dolphin.png", bgGradient: "from-cyan-200 via-blue-200 to-cyan-100", textColor: "text-cyan-800", accentColor: "bg-cyan-500", title: "流れに乗ろう", desc: "無理せず、力まず、水の流れのように。異なる意見や環境も、今のキミなら上手にミックスして新しい価値を作れるよ。", luckyItem: "ミネラル水", luckyColor: "アクアブルー", tags: ["#調和", "#節度", "#融合"] },
+  { id: 14, name: "TEMPERANCE", rarity: 2, animal: "調 இறந்தのイルカ", emoji: "🐬", image: "/14_dolphin.png", bgGradient: "from-cyan-200 via-blue-200 to-cyan-100", textColor: "text-cyan-800", accentColor: "bg-cyan-500", title: "流れに乗ろう", desc: "無理せず、力まず、水の流れのように。異なる意見や環境も、今のキミなら上手にミックスして新しい価値を作れるよ。", luckyItem: "ミネラル水", luckyColor: "アクアブルー", tags: ["#調和", "#節度", "#融合"] },
   { id: 15, name: "THE DEVIL", rarity: 1, animal: "誘惑のサル", emoji: "🐵", image: "/15_monkey.png", bgGradient: "from-red-200 via-purple-200 to-gray-200", textColor: "text-red-900", accentColor: "bg-red-500", title: "誘惑に注意！", desc: "「あと5分だけ…」が命取りになりそう。甘い話や怠け心にロックオンされてるかも。今日は強い意志でブレーキを踏んで！", luckyItem: "目覚まし時計", luckyColor: "ブラック", tags: ["#束縛", "#誘惑", "#欲望"] },
   { id: 16, name: "THE TOWER", rarity: 1, animal: "衝撃のヤギ", emoji: "🐐", image: "/16_goat.png", bgGradient: "from-gray-300 via-yellow-200 to-orange-200", textColor: "text-gray-800", accentColor: "bg-orange-500", title: "ハプニング発生!?", desc: "予期せぬ出来事があるかも。でもビビらないで！それは「現状打破」の合図。壊れた後には、もっと頑丈な土台が作れるから。", luckyItem: "スマホケース", luckyColor: "ショッキングピンク", tags: ["#崩壊", "#啓示", "#急変"] },
   { id: 17, name: "THE STAR", rarity: 3, animal: "希望のスワン", emoji: "🦢", image: "/17_swan.png", bgGradient: "from-sky-200 via-blue-100 to-white", textColor: "text-sky-800", accentColor: "bg-sky-400", title: "キラキラの希望", desc: "暗闇に星が輝くように、明るい見通しが立ってくるよ。願い事は叶う前提で語ってみて。君の才能がスポットライトを浴びる予感。", luckyItem: "ラメ入りグッズ", luckyColor: "パールホワイト", tags: ["#希望", "#ひらめき", "#才能"] },
@@ -64,14 +64,14 @@ const TAROT_DATA = [
   }
 ];
 
-// 相性計算ロジック
+// 相性計算ロジック（改行を追加）
 const getCompatibility = (id1, id2) => {
   const score = ((id1 * 7 + id2 * 13) % 61) + 40;
   let text = "";
-  if (score >= 90) text = "運命のペア！息ピッタリで最高の1日になりそう✨";
-  else if (score >= 70) text = "とても良い相性！一緒に行動するとラッキーなことが起こるかも♪";
-  else if (score >= 50) text = "まずまずの相性。お互いの違いを楽しんでみて！";
-  else text = "逆に新鮮な組み合わせ！新しい発見があるかも？";
+  if (score >= 90) text = "運命のペア！\n息ピッタリで最高の1日になりそう✨";
+  else if (score >= 70) text = "とても良い相性！\n一緒に行動するとラッキーなことが起こるかも♪";
+  else if (score >= 50) text = "まずまずの相性。\nお互いの違いを楽しんでみて！";
+  else text = "逆に新鮮な組み合わせ！\n新しい発見があるかも？";
   return { score, text };
 };
 
@@ -219,6 +219,9 @@ export default function App() {
   const [collectionDetailCard, setCollectionDetailCard] = useState(null);
   
   const [partnerCard, setPartnerCard] = useState(null);
+  const [generatedImage, setGeneratedImage] = useState(null); // ダウンロード用画像状態
+  const [isGenerating, setIsGenerating] = useState(false); // 画像生成中フラグ
+
   const resultRef = useRef(null);
   const detailScrollRef = useRef(null);
 
@@ -353,21 +356,27 @@ export default function App() {
     }
   };
 
+  // 画像保存処理（モーダル表示方式に変更）
   const handleDownload = useCallback(() => {
     if (resultRef.current === null) return;
     if (!window.htmlToImage) {
       alert("準備中です。数秒後にもう一度お試しください。");
       return;
     }
+    
+    setIsGenerating(true); // ボタンをローディング状態にする
     const bgColors = { day: '#fff0f5', sunset: '#fff7ed', night: '#1e1b4b' };
+    
     window.htmlToImage.toPng(resultRef.current, { cacheBust: true, backgroundColor: bgColors[theme] })
       .then((dataUrl) => {
-        const link = document.createElement('a');
-        link.download = `anitaro-${selectedCard.animal}.png`;
-        link.href = dataUrl;
-        link.click();
+        setGeneratedImage(dataUrl); // 画像をStateにセットしてモーダルを開く
+        setIsGenerating(false);
       })
-      .catch(() => alert("画像の保存に失敗しました🙇‍♂️"));
+      .catch((err) => {
+        console.error('画像生成エラー:', err);
+        alert("画像の生成に失敗しました🙇‍♂️");
+        setIsGenerating(false);
+      });
   }, [resultRef, selectedCard, theme]);
 
   const themeStyles = {
@@ -377,7 +386,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen ${themeStyles[theme]} font-sans flex flex-col items-center overflow-x-hidden selection:bg-pink-200 transition-colors duration-1000`}>
+    <div className={`min-h-screen ${themeStyles[theme]} font-sans flex flex-col items-center overflow-x-clip selection:bg-pink-200 transition-colors duration-1000`}>
       <header className="w-full p-4 flex justify-between items-center max-w-md mx-auto z-30">
         <div className="flex items-center gap-2">
           <div className="bg-white p-2 rounded-xl shadow-md rotate-3 border-2 border-pink-200">
@@ -494,7 +503,7 @@ export default function App() {
         {gameState === 'result' && selectedCard && (
           <div className="w-full flex flex-col items-center animate-fade-in pb-10 z-20">
             <div ref={resultRef} className="w-full flex flex-col items-center pt-2 pb-4 px-2">
-              <div className="perspective-1000 w-72 h-[450px] cursor-pointer mb-6 relative z-20" onClick={() => setIsFlipped(!isFlipped)}>
+              <div className="perspective-1000 w-72 h-[450px] cursor-pointer mb-6 relative z-20 touch-pan-y" onClick={() => setIsFlipped(!isFlipped)}>
                 <div className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
                   <div className="absolute w-full h-full backface-hidden"><CardBack /></div>
                   <div className="absolute w-full h-full backface-hidden rotate-y-180 drop-shadow-2xl"><CardFront data={selectedCard} /></div>
@@ -541,7 +550,14 @@ export default function App() {
                       <div className={`text-[10px] font-black mt-1 bg-white/50 px-2 py-0.5 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>お友達</div>
                     </div>
                   </div>
-                  <p className={`text-sm text-center font-bold px-2 ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>{getCompatibility(selectedCard.id, partnerCard.id).text}</p>
+                  {/* テキストを改行して表示 */}
+                  <p className={`text-sm text-center font-bold px-2 leading-relaxed ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>
+                    {getCompatibility(selectedCard.id, partnerCard.id).text.split('\n').map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}<br/>
+                      </React.Fragment>
+                    ))}
+                  </p>
                 </div>
               )}
             </div>
@@ -551,11 +567,38 @@ export default function App() {
                 <button onClick={resetReading} className={`flex-1 py-3.5 border-2 rounded-2xl font-bold active:scale-95 transition-all flex items-center justify-center gap-2 ${theme === 'night' ? 'bg-indigo-950 border-indigo-800 text-indigo-300 hover:bg-indigo-900' : 'bg-white border-gray-100 text-gray-500 hover:bg-gray-50'}`}><RefreshCw className="w-5 h-5" /> もう一度</button>
                 <button onClick={handleShare} className="flex-1 py-3.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-2xl font-bold shadow-lg shadow-pink-200/50 hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"><Share2 className="w-5 h-5" /> シェア</button>
               </div>
-              <button onClick={handleDownload} className="w-full py-3.5 bg-gray-800 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 border border-gray-700"><Download className="w-5 h-5" /> 画像として保存する</button>
+              <button 
+                onClick={handleDownload} 
+                disabled={isGenerating}
+                className="w-full py-3.5 bg-gray-800 text-white rounded-2xl font-bold shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 border border-gray-700 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isGenerating ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />} 
+                {isGenerating ? "画像を作成中..." : "画像として保存する"}
+              </button>
             </div>
           </div>
         )}
       </main>
+
+      {/* 🌟 画像保存用モーダル（長押し保存対応） */}
+      {generatedImage && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-fade-in" onClick={() => setGeneratedImage(null)}>
+          <div className="w-full max-w-sm flex flex-col items-center" onClick={e => e.stopPropagation()}>
+            <div className="bg-pink-500 text-white px-6 py-2 rounded-full font-bold mb-4 shadow-lg flex items-center gap-2 animate-bounce">
+              <Download className="w-5 h-5" /> 画像を長押しして保存！
+            </div>
+            
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl mb-6">
+              {/* pointer-events-auto を指定して長押しメニューが反応するようにする */}
+              <img src={generatedImage} alt="Result" className="w-full h-auto pointer-events-auto" />
+            </div>
+
+            <button onClick={() => setGeneratedImage(null)} className="bg-white/20 text-white px-8 py-3 rounded-full font-bold hover:bg-white/30 transition shadow-sm flex items-center gap-2">
+              <X className="w-5 h-5" /> 閉じる
+            </button>
+          </div>
+        </div>
+      )}
 
       {isCollectionOpen && (
         <>
