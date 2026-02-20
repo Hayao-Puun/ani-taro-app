@@ -18,7 +18,7 @@ const TAROT_DATA = [
   { id: 11, name: "JUSTICE", rarity: 2, animal: "バランスフラミンゴ", emoji: "🦩", image: "/11_flamingo.png", bgGradient: "from-pink-200 via-red-100 to-pink-100", textColor: "text-rose-800", accentColor: "bg-rose-400", title: "バランス感覚", desc: "仕事と遊び、本音と建前。今日はそのバランスが絶妙に取れる日。片方に偏りすぎず、冷静な判断ができるよ。", luckyItem: "ヨガマット", luckyColor: "コーラル", tags: ["#公平", "#均衡", "#正しさ"] },
   { id: 12, name: "THE HANGED MAN", rarity: 1, animal: "のんびりナマケモノ", emoji: "🦥", image: "/12_sloth.png", bgGradient: "from-green-100 via-yellow-100 to-green-100", textColor: "text-green-800", accentColor: "bg-green-500", title: "視点を変えて", desc: "行き詰まったら、逆立ちしてみる？（比喩だよ！）無理に動かず、一旦停止して違う角度から見ると、意外な解決策が見つかるかも。", luckyItem: "アイマスク", luckyColor: "ベージュ", tags: ["#忍耐", "#視点変更", "#試練"] },
   { id: 13, name: "DEATH", rarity: 3, animal: "再生の蝶", emoji: "🦋", image: "/13_butterfly.png", bgGradient: "from-purple-300 via-blue-300 to-indigo-300", textColor: "text-purple-900", accentColor: "bg-purple-500", title: "華麗なる変身", desc: "「終わり」は「始まり」の合図。古い習慣やイマイチな関係はスッパリ手放して、新しい自分に生まれ変わるチャンス！脱皮の時だよ。", luckyItem: "新しいコスメ", luckyColor: "ラベンダー", tags: ["#終了", "#再生", "#変容"] },
-  { id: 14, name: "TEMPERANCE", rarity: 2, animal: "調 இறந்தのイルカ", emoji: "🐬", image: "/14_dolphin.png", bgGradient: "from-cyan-200 via-blue-200 to-cyan-100", textColor: "text-cyan-800", accentColor: "bg-cyan-500", title: "流れに乗ろう", desc: "無理せず、力まず、水の流れのように。異なる意見や環境も、今のキミなら上手にミックスして新しい価値を作れるよ。", luckyItem: "ミネラル水", luckyColor: "アクアブルー", tags: ["#調和", "#節度", "#融合"] },
+  { id: 14, name: "TEMPERANCE", rarity: 2, animal: "調和のイルカ", emoji: "🐬", image: "/14_dolphin.png", bgGradient: "from-cyan-200 via-blue-200 to-cyan-100", textColor: "text-cyan-800", accentColor: "bg-cyan-500", title: "流れに乗ろう", desc: "無理せず、力まず、水の流れのように。異なる意見や環境も、今のキミなら上手にミックスして新しい価値を作れるよ。", luckyItem: "ミネラル水", luckyColor: "アクアブルー", tags: ["#調和", "#節度", "#融合"] },
   { id: 15, name: "THE DEVIL", rarity: 1, animal: "誘惑のサル", emoji: "🐵", image: "/15_monkey.png", bgGradient: "from-red-200 via-purple-200 to-gray-200", textColor: "text-red-900", accentColor: "bg-red-500", title: "誘惑に注意！", desc: "「あと5分だけ…」が命取りになりそう。甘い話や怠け心にロックオンされてるかも。今日は強い意志でブレーキを踏んで！", luckyItem: "目覚まし時計", luckyColor: "ブラック", tags: ["#束縛", "#誘惑", "#欲望"] },
   { id: 16, name: "THE TOWER", rarity: 1, animal: "衝撃のヤギ", emoji: "🐐", image: "/16_goat.png", bgGradient: "from-gray-300 via-yellow-200 to-orange-200", textColor: "text-gray-800", accentColor: "bg-orange-500", title: "ハプニング発生!?", desc: "予期せぬ出来事があるかも。でもビビらないで！それは「現状打破」の合図。壊れた後には、もっと頑丈な土台が作れるから。", luckyItem: "スマホケース", luckyColor: "ショッキングピンク", tags: ["#崩壊", "#啓示", "#急変"] },
   { id: 17, name: "THE STAR", rarity: 3, animal: "希望のスワン", emoji: "🦢", image: "/17_swan.png", bgGradient: "from-sky-200 via-blue-100 to-white", textColor: "text-sky-800", accentColor: "bg-sky-400", title: "キラキラの希望", desc: "暗闇に星が輝くように、明るい見通しが立ってくるよ。願い事は叶う前提で語ってみて。君の才能がスポットライトを浴びる予感。", luckyItem: "ラメ入りグッズ", luckyColor: "パールホワイト", tags: ["#希望", "#ひらめき", "#才能"] },
@@ -222,7 +222,7 @@ export default function App() {
   const [generatedImage, setGeneratedImage] = useState(null); // ダウンロード用画像状態
   const [isGenerating, setIsGenerating] = useState(false); // 画像生成中フラグ
 
-  const resultRef = useRef(null);
+  const captureRef = useRef(null); // 画像生成（オフスクリーン）用のRef
   const detailScrollRef = useRef(null);
 
   useEffect(() => {
@@ -342,11 +342,22 @@ export default function App() {
     }, 300);
   };
 
+  // 🌟 シェア文言の変更（相性あり・なしで分岐し、文字数上限に配慮）
   const handleShare = async () => {
     if (!selectedCard) return;
-    const rarityStars = "★".repeat(selectedCard.rarity);
     const shareUrl = `https://ani-taro-app.vercel.app/?partner=${selectedCard.id}`;
-    const shareText = `#AniTaro 運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n▼私との相性を占ってみる？\n${shareUrl}`;
+    let shareText = '';
+
+    if (partnerCard) {
+      // 相性チェックの場合のテキスト（長文のdescは省いて文字数削減）
+      const comp = getCompatibility(selectedCard.id, partnerCard.id);
+      const compText = comp.text.replace(/\n/g, ' '); // スペース区切りにしてスッキリさせる
+      shareText = `#AniTaro 相性チェック！\nあなた「${selectedCard.animal}」\nお友達「${partnerCard.animal}」\n\n相性度は【 ${comp.score}% 】✨\n${compText}\n\n▼あなたも占ってみる？\n${shareUrl}`;
+    } else {
+      // 通常の占いの場合のテキスト
+      const rarityStars = "★".repeat(selectedCard.rarity);
+      shareText = `#AniTaro 運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n\n▼私との相性を占ってみる？\n${shareUrl}`;
+    }
 
     if (navigator.share) {
       try { await navigator.share({ text: shareText }); } catch (err) {}
@@ -356,20 +367,25 @@ export default function App() {
     }
   };
 
-  // 画像保存処理（モーダル表示方式に変更）
+  // 🌟 画像保存処理（オフスクリーンでキャプチャし、3Dによる表示崩れを防ぐ）
   const handleDownload = useCallback(() => {
-    if (resultRef.current === null) return;
+    if (captureRef.current === null) return;
     if (!window.htmlToImage) {
       alert("準備中です。数秒後にもう一度お試しください。");
       return;
     }
     
-    setIsGenerating(true); // ボタンをローディング状態にする
+    setIsGenerating(true); 
     const bgColors = { day: '#fff0f5', sunset: '#fff7ed', night: '#1e1b4b' };
     
-    window.htmlToImage.toPng(resultRef.current, { cacheBust: true, backgroundColor: bgColors[theme] })
+    // captureRef (隠し要素) をキャプチャする
+    window.htmlToImage.toPng(captureRef.current, { 
+      cacheBust: true, 
+      backgroundColor: bgColors[theme],
+      pixelRatio: 2 // 画質を良くする
+    })
       .then((dataUrl) => {
-        setGeneratedImage(dataUrl); // 画像をStateにセットしてモーダルを開く
+        setGeneratedImage(dataUrl); 
         setIsGenerating(false);
       })
       .catch((err) => {
@@ -377,7 +393,7 @@ export default function App() {
         alert("画像の生成に失敗しました🙇‍♂️");
         setIsGenerating(false);
       });
-  }, [resultRef, selectedCard, theme]);
+  }, [captureRef, selectedCard, theme]);
 
   const themeStyles = {
     day: "bg-[#fff0f5] text-gray-800",
@@ -502,7 +518,7 @@ export default function App() {
 
         {gameState === 'result' && selectedCard && (
           <div className="w-full flex flex-col items-center animate-fade-in pb-10 z-20">
-            <div ref={resultRef} className="w-full flex flex-col items-center pt-2 pb-4 px-2">
+            <div className="w-full flex flex-col items-center pt-2 pb-4 px-2">
               <div className="perspective-1000 w-72 h-[450px] cursor-pointer mb-6 relative z-20 touch-pan-y" onClick={() => setIsFlipped(!isFlipped)}>
                 <div className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
                   <div className="absolute w-full h-full backface-hidden"><CardBack /></div>
@@ -580,21 +596,99 @@ export default function App() {
         )}
       </main>
 
-      {/* 🌟 画像保存用モーダル（長押し保存対応） */}
+      {/* 🌟 【画像生成用】非表示エリア (3D変形なしのプレーンな状態をキャプチャ) */}
+      {selectedCard && (
+        <div style={{ position: 'fixed', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
+          <div ref={captureRef} className={`w-[420px] flex flex-col items-center pt-8 pb-10 px-6 gap-6 ${themeStyles[theme]} font-sans`}>
+            {/* ヘッダーロゴ */}
+            <div className="flex items-center gap-2 mb-2">
+              <div className="bg-white p-2 rounded-xl shadow-md rotate-3 border-2 border-pink-200">
+                <Sparkles className="w-6 h-6 text-pink-400 fill-pink-100" />
+              </div>
+              <h1 className={`font-black text-3xl tracking-tighter italic transform -skew-x-6 drop-shadow-sm ${theme === 'night' ? 'text-white' : 'text-gray-700'}`}>
+                Ani-Taro<span className="text-pink-400">!</span>
+              </h1>
+            </div>
+
+            {/* カード本体 */}
+            <div className="w-72 h-[450px]">
+              <CardFront data={selectedCard} />
+            </div>
+
+            {/* メッセージ */}
+            <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 ${theme === 'night' ? 'bg-indigo-900/90 border-indigo-500/30' : 'bg-white/90 border-white'}`}>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="bg-pink-500 text-white p-1.5 rounded-lg shadow-sm"><Zap className="w-4 h-4 fill-white" /></span>
+                <span className={`text-xs font-black uppercase tracking-widest ${theme === 'night' ? 'text-indigo-200' : 'text-gray-400'}`}>MESSAGE</span>
+              </div>
+              <p className={`text-base leading-relaxed font-medium ${theme === 'night' ? 'text-indigo-50' : 'text-gray-700'}`}>{selectedCard.desc}</p>
+            </div>
+
+            {/* 相性チェック */}
+            {partnerCard && (
+              <div className={`w-full rounded-[2rem] p-6 shadow-xl border-2 ${theme === 'night' ? 'bg-pink-900/40 border-pink-500/30' : 'bg-pink-50/90 border-pink-200'}`}>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
+                  <span className={`text-sm font-black tracking-widest ${theme === 'night' ? 'text-pink-200' : 'text-pink-600'}`}>相性チェック</span>
+                  <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
+                </div>
+                <div className="flex justify-around items-center mb-4 relative">
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 flex items-center justify-center">
+                      {selectedCard.image ? (
+                        <img src={selectedCard.image} alt="you" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      ) : null}
+                      <div className="text-4xl filter drop-shadow-md" style={{ display: selectedCard.image ? 'none' : 'block' }}>{selectedCard.emoji}</div>
+                    </div>
+                    <div className={`text-[10px] font-black mt-1 bg-white/50 px-2 py-0.5 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>あなた</div>
+                  </div>
+                  <div className="flex flex-col items-center z-10 bg-white/90 px-4 py-2 rounded-full border-2 border-pink-200 shadow-md">
+                     <div className="text-2xl font-black text-pink-500 leading-none">{getCompatibility(selectedCard.id, partnerCard.id).score}<span className="text-sm">%</span></div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 flex items-center justify-center">
+                      {partnerCard.image ? (
+                        <img src={partnerCard.image} alt="partner" className="max-w-full max-h-full object-contain filter drop-shadow-md" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      ) : null}
+                      <div className="text-4xl filter drop-shadow-md" style={{ display: partnerCard.image ? 'none' : 'block' }}>{partnerCard.emoji}</div>
+                    </div>
+                    <div className={`text-[10px] font-black mt-1 bg-white/50 px-2 py-0.5 rounded-full ${theme === 'night' ? 'text-indigo-900' : 'text-gray-700'}`}>お友達</div>
+                  </div>
+                </div>
+                <p className={`text-sm text-center font-bold px-2 leading-relaxed ${theme === 'night' ? 'text-pink-100' : 'text-gray-700'}`}>
+                  {getCompatibility(selectedCard.id, partnerCard.id).text.split('\n').map((line, i) => (
+                    <React.Fragment key={i}>{line}<br/></React.Fragment>
+                  ))}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 🌟 画像保存用モーダル（長押し保存対応＆戻りやすく改善） */}
       {generatedImage && (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-black/90 backdrop-blur-sm animate-fade-in" onClick={() => setGeneratedImage(null)}>
+          
+          {/* 戻りやすいように右上に×ボタン */}
+          <button onClick={() => setGeneratedImage(null)} className="absolute top-6 right-6 bg-white/20 text-white p-3 rounded-full font-bold hover:bg-white/40 transition shadow-sm z-10">
+            <X className="w-6 h-6" />
+          </button>
+          
           <div className="w-full max-w-sm flex flex-col items-center" onClick={e => e.stopPropagation()}>
-            <div className="bg-pink-500 text-white px-6 py-2 rounded-full font-bold mb-4 shadow-lg flex items-center gap-2 animate-bounce">
+            <div className="bg-pink-500 text-white px-6 py-2 rounded-full font-bold mb-4 shadow-lg flex items-center gap-2 animate-bounce pointer-events-none">
               <Download className="w-5 h-5" /> 画像を長押しして保存！
             </div>
             
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl mb-6">
-              {/* pointer-events-auto を指定して長押しメニューが反応するようにする */}
+            {/* スクロール可能な画像表示エリア */}
+            <div className="relative w-full max-h-[65vh] overflow-y-auto rounded-3xl shadow-2xl mb-6 hide-scrollbar">
+              {/* pointer-events-auto を指定して長押しメニューが確実に反応するようにする */}
               <img src={generatedImage} alt="Result" className="w-full h-auto pointer-events-auto" />
             </div>
 
-            <button onClick={() => setGeneratedImage(null)} className="bg-white/20 text-white px-8 py-3 rounded-full font-bold hover:bg-white/30 transition shadow-sm flex items-center gap-2">
-              <X className="w-5 h-5" /> 閉じる
+            {/* 下部にも大きな閉じるボタン */}
+            <button onClick={() => setGeneratedImage(null)} className="bg-white text-gray-800 px-8 py-3.5 rounded-full font-black hover:bg-gray-100 transition shadow-lg flex items-center justify-center gap-2 w-[80%] max-w-xs">
+              閉じる
             </button>
           </div>
         </div>
