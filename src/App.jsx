@@ -346,7 +346,8 @@ export default function App() {
       shareText = `#AniTaro 相性チェック！\nあなた「${selectedCard.animal}」\nお友達「${partnerCard.animal}」\n\n相性度は【 ${comp.score}% 】✨\n${compText}\n\n▼あなたも占ってみる？\n${shareUrl}`;
     } else {
       const rarityStars = "★".repeat(selectedCard.rarity);
-      shareText = `#AniTaro 運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n\n▼私との相性を占ってみる？\n${shareUrl}`;
+      // 通常運勢のときにもメッセージ(desc)を追加
+      shareText = `#AniTaro 運勢レア度：${rarityStars}\n今日の相棒は「${selectedCard.animal}」！\n\n🔮 ${selectedCard.title}\n${selectedCard.desc}\n\n▼私との相性を占ってみる？\n${shareUrl}`;
     }
 
     if (navigator.share) {
